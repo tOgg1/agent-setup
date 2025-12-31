@@ -45,22 +45,25 @@ When in doubt: ask first.
 
 ---
 
-## 2) Fast Start Checklist (do this at the beginning of a task)
+## 2) General workflow
 
-1) Read the index: `agent_docs/README.md`
-2) Check MCP Agent Mail:
+1) Read the root README.md.
+2) Read the index: `agent_docs/README.md`
+3) Check MCP Agent Mail:
    - read inbox / recent thread activity
    - see if leases already exist on your target paths
-3) Pick/confirm the task source (Beads is default):
+4) Pick/confirm the task source (Beads is default):
    - `bd ready --json`
-4) Announce intent (Agent Mail):
+5) Announce intent (Agent Mail):
    - task id (if any), goal, target paths, expected outputs
-5) Reserve files BEFORE editing (Agent Mail leases):
+6) Reserve files BEFORE editing (Agent Mail leases):
    - reserve the specific files/dirs you’ll change
-6) Pull relevant memory for non-trivial work:
+7 optional) Pull relevant memory for non-trivial work:
    - `cm context "<what you are about to do>" --json`
-7) Before implementing something that might have been solved already:
+8 optional) Before implementing something that might have been solved already:
    - `cass search "<keywords>" --robot --limit 5`
+9) Implement the task you are assigned.
+10) ALWAYS close the beads task before you hand off to the user again.
 
 ---
 
