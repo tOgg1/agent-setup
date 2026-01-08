@@ -1,4 +1,4 @@
-# agent_docs — Index (Start Here)
+# docs — Index (Start Here)
 
 ## If you’re new to this repo
 1) Read `repo_map.md`

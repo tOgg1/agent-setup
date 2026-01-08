@@ -1,209 +1,108 @@
-# AGENTS.md — Project Agent Operating Manual
+# AGENTS.md
 
-This repo is commonly worked on by MULTIPLE AGENTS IN PARALLEL, often in the SAME working directory.
-Assume the workspace may change while you work.
+This is the agent file for Tormod Haugland. You are working for him.
+Work style: telegraph; noun-phrases ok; drop grammer; min tokens.
 
-If anything is unclear or conflicts with observed reality, STOP and ask rather than guessing.
+Start: say hi + 1 motivating line.
 
----
+## Agent protocol
 
-## 0) Repo Quick Facts (EDIT PER REPO)
+- Contact: Tormod Haugland (@TormodHaugland, tormod.haugland@gmail.com)
+- Workspace: `~/Code`. 
+- Workspace organiser tool `co`. `co --robot-help` to see usage. Repo at `~/Code/oss--code-organization/repos/code-organization`.
+- Keep files short and organised. Prefer flat hierarchies. Split files if above 500 LOC.
+- Ignore CLAUDE.md. Symlinked.
+- Web: Make specific searches. Avoid using old sources (before 2024/2025). Use firecrawl as backup
+- Bugs: Add regression tests when fixing bugs.
+- Commits: Prefer conventional commits (feat|fix|refactor|build|ci|chore|docs|style|perf|test).
+- Prefer end-to-end to verify; if blocked say whats missing.
+- Frontend: Always check design implementation. Check against figma design or reference design if it exists. Use `playwright`. Use `dpc` for design comparison.
+- Guardrail: use `trash` or POSIX equivalent for deleting.
+- You are pragmatic programmer.
+- Style: telegraph. Drop filler/grammer. Min tokens (global AGENTS + replies).
 
-- Project: <name>
-- Primary stack: <e.g. bun / node / python / go / rust>
-- “How to run” (authoritative): `agent_docs/runbooks/dev.md`
-- “How to test” (authoritative): `agent_docs/runbooks/test.md`
-- “How to release/deploy” (if applicable): `agent_docs/runbooks/release.md`
-- Repo map / key directories: `agent_docs/repo_map.md`
-- Known pitfalls: `agent_docs/gotchas.md`
+## Computer mesh
 
----
+- We run multiple computers. Use `tailscale status` to see them.
+- You are my primary macbook pro, named "macbook-pro" on the network.
+- You can ssh by computer names.
 
-## 1) Non‑negotiables (read first)
+## Important locations
 
-### Multi-agent coordination is mandatory
+- Personal website repo: `~/Code/personal--tormodhaugland/repos/tormodhaugland.com/`
+- Obsidian vault: `~/Documents/Primary/`
 
-- Before editing files, coordinate via **MCP Agent Mail**.
-- Reserve the paths you will touch (leases) and announce intent.
-- Only edit files you have reserved (or have explicit permission to share).
+## Docs
 
-### No destructive actions without explicit approval
+- Global docs live at `~/docs`.
+- Write important findings to the relevant `docs/` folder in repo.
+- Write findings of global relevance to global docs.
+- Always list docs folder when looking for info. Follow internal hints and links.
 
-Do NOT run (or propose as a “quick fix”) without explicit user approval:
-- `git reset --hard`
-- `git clean -fd` (or variants)
-- `rm -rf` (or any delete/overwrite command with broad scope)
-- anything that deletes data, generated artifacts, or repo history
+## Testing
 
-When in doubt: ask first.
+- Always typecheck, lint or build when you are working.
+- We have high test coverage. Write tests for logic.
+- Avoid complex automated e2e tests. Instead highlight to the user when complex UI must be tested manually.
+- CI: `gh run list/view`. Rerun until green.
 
-### Keep diffs scoped
+## Code review
 
-- No drive-by refactors.
-- No mass reformatting.
-- No “cleanup” outside the leased scope.
+- If tasked with code reviewing, go deep on all changes.
+- Be the antagonist and find potential bugs, issues, inconsistencies and bad code.
+- Don't be unreasonable and pedantic. We are pragmatic programmers.
+- Summarise the code review in a markdown document inside `docs/review` inside the repo. 
+- Communication on a PR should be appended to the review doc.
 
----
+## PR feedback
 
-## 2) General workflow
+- Active PR: gh pr view --json number,title,url --jq '"PR #\\(.number): \\(.title)\\n\\(.url)"'.
+- PR comments: gh pr view … + gh api …/comments --paginate.
+- Replies: cite fix + file/line; resolve threads only after fix lands.
+- When merging a PR: thank the contributor in CHANGELOG.md.
 
-1) Read the root README.md.
-2) Read the index: `agent_docs/README.md`
-3) Check MCP Agent Mail:
-   - read inbox / recent thread activity
-   - see if leases already exist on your target paths
-4) Pick/confirm the task source (Beads is default):
-   - `bd ready --json`
-5) Announce intent (Agent Mail):
-   - task id (if any), goal, target paths, expected outputs
-6) Reserve files BEFORE editing (Agent Mail leases):
-   - reserve the specific files/dirs you’ll change
-7 optional) Pull relevant memory for non-trivial work:
-   - `cm context "<what you are about to do>" --json`
-8 optional) Before implementing something that might have been solved already:
-   - `cass search "<keywords>" --robot --limit 5`
-9) Implement the task you are assigned.
-10) ALWAYS close the beads task before you hand off to the user again.
+## Critical thinking
 
----
+- Fix root cause (not band-aid).
+- Unsure: read more code; if still stuck, ask w/ short options.
+- Conflicts: call out; pick safer path.
+- Unrecognized changes: assume other agent; keep going; focus your changes. If it causes issues, stop + ask user.
+- Leave breadcrumb notes in thread.
 
-## 3) Coordination Protocol (MCP Agent Mail)
 
-Use Agent Mail for:
-- work announcements + status updates
-- file reservations (leases)
-- handoffs (“what changed / what to test / what’s next”)
+## Git usage
 
-Rules:
-- Acquire leases before editing.
-- If you hit a conflict, do not brute-force. Coordinate (adjust scope, wait, or get permission).
-- Release leases when done.
-- Post a final handoff message at the end of your work session.
+- Safe by default: git status/diff/log. Push only when user asks.
+- git checkout ok for PR review / explicit request.
+- Branch changes require user consent.
+- Destructive ops forbidden unless explicit (reset --hard, clean, restore, rm, …).
+- Don’t delete/rename unexpected stuff; stop + ask.
+- No repo-wide S/R scripts; keep edits small/reviewable.
+- Avoid manual git stash; if Git auto-stashes during pull/rebase, that’s fine (hint, not hard guardrail).
+- If user types a command (“pull and push”), that’s consent for that command.
+- No amend unless asked.
+- Big review: git --no-pager diff --color=never.
+- Multi-agent: check git status/diff before edits; ship small commits.
 
-If MCP Agent Mail tools are not available in your harness/runtime, tell the user immediately.
+## sv usage
 
----
+- `sv --robot-help`
+- Check if the repo uses `sv`: Look for existence of `.sv`.
+- Usage of `sv` will be indicated in repo AGENTS.md.
+- Only create a new workspace when doing very long and complicated features, or when requiring 
+- Use sv to check file locks. Only stop when a 
+- Always merge your own changes back into main from a workspace by using the hoist command after finishing.
 
-## 4) Task System (Beads is default)
+## Tools
 
-Beads (`bd`) is the canonical task tracker.
+### tickets (`tk`)
 
-- Quickstart to get a full overview over bd functionality: `bd quickstart`.
-- Find ready work: `bd ready --json`
-- Claim work: `bd update <id> --status in_progress --json`
-- Create follow-ups: `bd create "Title" -t task -p 2 --json`
-- Close work: `bd close <id> --reason "…" --json`
+- Tickets is our in-repo task manager of choice.
+- Tickets store markdown files in `.tickets/` for tracking.
+- `tk --help` to get started.
 
-Project state:
-- `.beads/` is authoritative and should be committed alongside related code changes.
-- Do not hand-edit beads JSONL; use `bd`.
+### gh
 
----
+- GitHub CLI for PRs/CI/releases. Given issue/PR URL (or /pull/5): use gh, not web search.
+- Examples: gh issue view <url> --comments -R owner/repo, gh pr view <url> --comments --files -R owner/repo.
 
-## 5) Quality Gate (Definition of Done)
-
-Before you call work “done” or hand off:
-
-1) Run the repo’s test/build/lint gates:
-   - Follow `agent_docs/runbooks/test.md`
-2) Run UBS bug scan (scope to changed files when possible):
-   - preferred: `ubs --staged` (if staging is in use)
-   - otherwise: `ubs --diff` (or `ubs .` for full scan)
-3) Summarize:
-   - what changed
-   - how verified (exact commands)
-   - risks / follow-ups
-
----
-
-## 6) Git & PR Workflow (multi-agent safe)
-
-### Commit messages
-- Use a simple descriptive title. No strict column limits.
-- Use a richer body explaining in detail what the commit does and why it exists.
-
-### Default workflow: “Commit pass” (current)
-In many projects, agents do not commit continuously.
-Instead, we group changes into logical commits in a commit pass.
-
-If you are NOT the integrator for this task:
-- avoid committing/pushing unless explicitly requested
-- leave a clean handoff summary + suggested commit grouping
-- do not stage/commit unrelated changes
-
-### Optional workflow: Continuous commits (allowed when explicitly chosen)
-If the team chooses continuous commits for a task:
-- keep commits small and coherent
-- do not commit broken states unless explicitly agreed
-- always stage explicitly (see below)
-
-### Critical staging rule in shared working dirs
-- NEVER use `git add -A` in a multi-agent shared working directory.
-- Always stage explicit paths:
-  - `git add path/to/file1 path/to/file2`
-- Always verify:
-  - `git diff --cached`
-  - `git status`
-
-### PR expectations
-A PR description must include:
-- What changed (bullets)
-- Why (goal/context)
-- How verified (exact commands + results)
-- Risk areas / follow-ups
-- Links/refs: Beads id(s) + Agent Mail thread (if available)
-
----
-
-## 7) Tool Quick Reference (and how to learn more)
-
-### MCP Agent Mail (coordination + leases)
-- Use the MCP tools provided by your harness for:
-  - inbox/thread reads, send message, acknowledge
-  - file leases/reservations and releases
-- Learn more:
-  - If the harness supports listing MCP tools, do that.
-  - Otherwise ask the user for the local integration commands.
-
-### Beads — `bd` (tasks)
-- Start here: `bd quickstart`
-- Help: `bd --help`
-- Ready work: `bd ready --json`
-
-### Beads Viewer — `bv` (triage / planning)
-- IMPORTANT: avoid interactive TUI unless explicitly requested.
-- Prefer robot outputs (examples; adjust to your version):
-  - `bv --robot-triage`
-  - `bv --robot-next`
-- Help: `bv --help`
-
-### CASS — `cass` (cross-agent history search)
-- IMPORTANT: never run bare `cass` (interactive).
-- Prefer:
-  - `cass health`
-  - `cass search "<q>" --robot --limit 5`
-  - `cass capabilities --json`
-  - `cass robot-docs guide`
-- Help: `cass --help`
-
-### CASS Memory — `cm` (procedural memory)
-- Before non-trivial tasks:
-  - `cm context "<task>" --json`
-- Help: `cm --help`
-
-### Ultimate Bug Scanner — `ubs` (bug scan)
-- Preferred: `ubs --staged` (or `ubs --diff`)
-- Full scan: `ubs .`
-- Help: `ubs --help`
-
----
-
-## 8) Keeping agent docs healthy (required habit)
-
-If you learn something that will save future time, update `agent_docs/`:
-- new command or workflow -> update runbook
-- architectural constraint -> add a decision doc
-- recurring failure mode -> add to gotchas
-
-Keep `AGENTS.md` short and operational.
-Put repo-specific, evolving knowledge in `agent_docs/`.
