@@ -1,0 +1,42 @@
+{
+  "harnesses": [
+    {
+      "name": "claude",
+      "paths": [
+        ".cc1",
+        ".cc2",
+        ".cc3"
+      ]
+    },
+    {
+      "name": "codex",
+      "paths": [
+        ".codex-1",
+        ".codex-2",
+        ".codex-3"
+      ]
+    },
+    {
+      "name": "opencode",
+      "paths": [
+        ".oc1",
+        ".oc2",
+        ".oc3"
+      ]
+    },
+    {
+      "name": "pi",
+      "paths": [
+        ".pi-1",
+        ".pi-2",
+        ".pi-3"
+      ]
+    },
+    {
+      "name": "gemini",
+      "paths": [
+        ".gemini"
+      ]
+    }
+  ]
+}
