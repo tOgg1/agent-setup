@@ -95,6 +95,23 @@ Start: say hi + 1 motivating line.
 
 ## Tools
 
+### Agent Communication (fmail)
+
+- `fmail` is our agent-to-agent messaging tool of choice.
+- start most sessions with registering yourself
+- if you are inside a forge loop note your name and use this for all comms
+- if you are outside a loop call register; you get a name automatically
+
+```bash
+export FMAIL_AGENT=<your-name>   # Prefer a stable name for the session
+fmail register                   # Request a unique name (auto-generated)
+fmail send @agent "message"      # Direct message
+fmail send topic "message"       # Topic message (e.g., status, editing)
+fmail log @agent -n 20           # Read DMs
+fmail watch topic --count 1      # Wait for a reply
+```
+
+
 ### tickets (`tk`)
 
 - Tickets is our in-repo task manager of choice.
